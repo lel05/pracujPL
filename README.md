@@ -1,1 +1,1 @@
-# pracujPL
+----- Projekt systemu ogłoszeniowego -----
