@@ -1,1 +1,1 @@
------ Projekt systemu ogłoszeniowego -----
+# | Projekt systemu ogłoszeniowego |
