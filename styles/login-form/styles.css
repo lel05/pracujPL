@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+.login-user p{
+  font-family: 'Montserrat', sans-serif;
+}
+.login-company p{
+  font-family: 'Montserrat', sans-serif;
+}
+
+.logo-container {
+  top: 10%;
+}
