@@ -30,18 +30,9 @@
           <input type="text" class="form-control" id="exampleInputSurame1">
         </div>
         <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Data urodzenia</label>
-          <input type="text" data-masked="" data-inputmask="'mask': '99 /99 /9999'" placeholder="__ /__ /____" class="form-control">
-        </div>
-        <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Adres e-mail</label>
           <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
           <div id="emailHelp" class="form-text">Nigdy nie udostępnimy Twojego adresu e-mail.</div>
-        </div>
-
-        <div class="mb-3">
-          <label for="exampleInputPhoneNumber1" class="form-label">Numer telefonu</label>
-          <input type="text" data-masked="" data-inputmask="'mask': '+48 999-999-999'" class="form-control" placeholder="+48 ___-___-___">
         </div>
         <button type="submit" class="position-relative bottom-0 start-50 translate-middle-x btn btn-warning mx-auto">Zarejestruj się</button>
       </form>
