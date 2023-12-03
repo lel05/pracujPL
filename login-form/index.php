@@ -16,43 +16,38 @@
     <img src="../Images/logos/logoWithName.png" alt="logo" class="img-fluid">
   </a>
 
-  <div class="container position-absolute top-50 start-50 translate-middle d-flex justify-content-center align-items-center w-50">
-    <div class="login-user me-5 w-100 bg-secondary bg-opacity-10 p-4 rounded-4 border border-warning">
+  <div class="container position-absolute top-50 start-50 translate-middle d-flex justify-content-center align-items-center w-25">
+    <div class="login-user w-100 bg-secondary bg-opacity-10 p-4 rounded-4 border border-warning">
       <p class="text-center text-uppercase fs-5 fw-medium">Logowanie dla użytkowników</p>
-      <form>
+      <form action="../includes/login.inc.php" method="post">
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Adres e-mail</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+          <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp">
           <div id="emailHelp" class="form-text">Nigdy nie udostępnimy Twojego adresu e-mail.</div>
         </div>
         <div class="mb-3">
           <label for="exampleInputPassword1" class="form-label">Hasło</label>
-          <input type="password" class="form-control" id="exampleInputPassword1">
+          <input type="password" class="form-control" name="pass" id="exampleInputPassword1">
         </div>
         <div class="mb-3 form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1">
+          <input type="checkbox" class="form-check-input" id="exampleCheck1" name="rememberme" value="true">
           <label class="form-check-label" for="exampleCheck1">Zapamiętaj mnie</label>
         </div>
-        <button type="submit" class="position-relative bottom-0 start-50 translate-middle-x btn btn-warning mx-auto">Zaloguj jako użytkownik</button>
+        <p class="fs-6">Nie posiadasz jeszcze konta? <a href="../register-form/index.php" class="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Zarejestruj</a> się za darmo!</p>
+        <button type="submit" name="submit" class="position-relative bottom-0 start-50 translate-middle-x btn btn-warning mx-auto">Zaloguj</button>
       </form>
-    </div>
-    <div class="login-company ms-5 w-100 bg-secondary bg-opacity-10 p-4 rounded-4 border border-warning">
-      <p class="text-center text-uppercase fs-5 fw-medium">Logowanie dla firm</p>
-      <form>
-        <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label">Nazwa firmy</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-        </div>
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Hasło</label>
-          <input type="password" class="form-control" id="exampleInputPassword1">
-        </div>
-        <div class="mb-3 form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1">
-          <label class="form-check-label" for="exampleCheck1">Zapamiętaj mnie</label>
-        </div>
-        <button type="submit" class="position-relative bottom-0 start-50 translate-middle-x btn btn-warning mx-auto">Zaloguj jako firma</button>
-      </form>
+      <?php
+
+      if (isset($_GET['error'])) {
+        if ($_GET['error'] == "emptyinput") {
+          echo "<p class='text-center fw-medium text-danger pt-2'>Wypełnij wszystkie pola!</p>";
+        } else if ($_GET['error'] == "wronglogin") {
+          echo "<p class='text-center fw-medium text-danger pt-2'>Logowanie nie powiodło się.</p>";
+        } else if ($_GET['error'] == "invalidemail") {
+          echo "<p class='text-center fw-medium text-danger pt-2'>Niepoprawny adres e-mail!</p>";
+        }
+      }
+      ?>
     </div>
   </div>
   <div class="toast-container position-fixed bottom-0 end-0 p-3">

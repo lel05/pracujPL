@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KarieraPlus</title>
+  <title>KarieraPlus - znajdź swoją wymarzoną prace!</title>
   <?php
   include_once '../includes.php';
   ?>
