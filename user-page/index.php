@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,18 +9,21 @@
   include_once '../includes.php';
   ?>
   <link rel="stylesheet" href="../styles/header/styles.css">
+  <link rel="stylesheet" href="../styles/user-page/styles.css">
 </head>
+
 <body>
 
-<header>
-  <?php
+  <header>
+    <?php
     include_once '../header/index.php';
-  ?>
-</header>
+    ?>
+  </header>
 
-<section>
-  
-</section>
-  
+  <section>
+    
+  </section>
+
 </body>
+
 </html>
