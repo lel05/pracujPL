@@ -34,7 +34,7 @@ session_start();
             echo  $name . " " . $surnameFirstletter.".";
             echo '</a>';
             echo '<ul class="dropdown-menu w-100 p-3 rounded mt-2">';
-              echo '<li><a class="dropdown-item border border-warning rounded-5 my-2 text-center text-warning" href="../login-form/index.php">Mój profil</a></li>';
+              echo '<li><a class="dropdown-item border border-warning rounded-5 my-2 text-center text-warning" href="../user-page/index.php">Mój profil</a></li>';
               echo '<li><a class="dropdown-item rounded-5 my-2 text-center border border-warning text-warning" href="../register-form/index.php">Ustawienia</a></li>';
               echo '<li><a class="dropdown-item rounded-5 my-2 text-center bg-warning" href="../includes/logout.inc.php">Wyloguj</a></li>';
             echo '</ul>';
