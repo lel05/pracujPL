@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="../styles/login-form/styles.css">
 </head>
 
-<body>
+<body onload="loadRememberedEmail()">
   <a href="../main/index.php" style="width: 20%; height: 100px;" class="position-absolute top-0 start-50 translate-middle-x rounded-3 overflow-hidden d-flex align-items-center justify-content-center mt-5">
     <img src="../Images/logos/logoWithName.png" alt="logo" class="img-fluid">
   </a>
@@ -30,7 +30,7 @@
           <input type="password" class="form-control" name="pass" id="exampleInputPassword1">
         </div>
         <div class="mb-3 form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1" name="rememberme" value="true">
+          <input type="checkbox" class="form-check-input" id="exampleCheck1" name="rememberme" value="true" onchange="rememberMe()">
           <label class="form-check-label" for="exampleCheck1">Zapamiętaj mnie</label>
         </div>
         <p class="fs-6">Nie posiadasz jeszcze konta? <a href="../register-form/index.php" class="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Zarejestruj</a> się za darmo!</p>
@@ -65,6 +65,25 @@
         autohide: false
       });
       myToast.show();
+
+      function rememberMe() {
+        var checkbox = document.getElementById("exampleCheck1");
+        var emailInput = document.getElementById("exampleInputEmail1");
+
+        if (checkbox.checked) {
+          localStorage.setItem("email", emailInput.value);
+        } else {
+          localStorage.removeItem("email");
+        }
+      }
+
+      function loadRememberedEmail() {
+        var email = localStorage.getItem("email");
+        if (email) {
+          document.getElementById("exampleInputEmail1").value = email;
+          document.getElementById("exampleCheck1").checked = true;
+        }
+      }
     </script>
 
 </body>

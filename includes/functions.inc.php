@@ -2,7 +2,7 @@
 
 function emptyInputRegister($name, $surname, $email, $pass)
 {
-  $result;
+  $result = false;
   if (empty($name) || empty($surname) || empty($email) || empty($pass)) {
     $result = true;
   } else {
@@ -13,7 +13,7 @@ function emptyInputRegister($name, $surname, $email, $pass)
 
 function invalidNames($name, $surname)
 {
-  $result;
+  $result = false;
   if (!preg_match("/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/", $name) || !preg_match("/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/", $surname)) {
     $result = true;
   } else {
@@ -24,7 +24,7 @@ function invalidNames($name, $surname)
 
 function invalidEmail($email)
 {
-  $result;
+  $result = false;
   if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $result = true;
   } else {
@@ -76,7 +76,7 @@ function createUser($conn, $name, $surname, $email, $pass)
 
 function emptyInputLogin($email, $pass)
 {
-  $result;
+  $result = false;
   if (empty($email) || empty($pass)) {
     $result = true;
   } else {
@@ -97,7 +97,7 @@ function loginUser($conn, $email, $pass)
   $passHashed = $userExists["password"];
   $checkPass = password_verify($pass, $passHashed);
 
-  if($checkPass === false) {
+  if ($checkPass === false) {
     header("location: ../login-form/index.php?error=wronglogin");
     exit();
   } else if ($checkPass === true) {
@@ -107,5 +107,65 @@ function loginUser($conn, $email, $pass)
     header("location: ../main/index.php");
     exit();
   }
+}
 
+function updateUserInfo($conn, $experience, $education, $skills, $courses, $links, $email, $numertelefonu, $dataurodzenia, $profilePicture, $profilePictureTmpName, $profilePictureSize, $profilePictureError)
+{
+
+  $fileExt = explode('.', $profilePicture);
+  $fileActualExt = strtolower(end($fileExt));
+  $userExists = userExists($conn, $_SESSION['userEmail']);
+
+  if ($profilePictureError === 0) {
+    if ($profilePictureSize < 1000000) {
+      $ppNameNew = uniqid('', true) . "." . $fileActualExt;
+      if ($userExists['avatar'] != "") {
+        unlink("../Images/ProfilePictures/" . $userExists['avatar']);
+      }
+      $fileDestination = '../Images/ProfilePictures/' . $ppNameNew;
+      move_uploaded_file($profilePictureTmpName, $fileDestination);
+      echo "<script>alert('gowno');</script>";
+    } else {
+      header("Location: ../user-page/index.php?error=profilepicturesizeerror");
+      exit;
+    }
+  } else {
+    header("Location: ../user-page/index.php?error=profilepictureerror");
+    exit;
+  }
+
+  $sql = "UPDATE `user` SET `birth_date`=?, `email`=?, `phone_number`=?, `avatar`=?, `job_experience`=?, `education`=?, `skills`=?, `courses`=?, `links`=? WHERE `user_id`=?";
+  $stmt = mysqli_stmt_init($conn);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../user-page/index.php?error=stmtfailed");
+    exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "sssssssssi", $dataurodzenia, $email, $numertelefonu, $ppNameNew, $experience, $education, $skills, $courses, $links, $_SESSION["userId"]);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+  header("location: ../user-page/index.php?error=none");
+  exit();
+}
+
+function postCounter($conn)
+{
+  $sql = "SELECT COUNT(offer_id) FROM offer;";
+  $stmt = mysqli_stmt_init($conn);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../main/index.php?error=stmtfailed");
+    exit();
+  }
+
+  mysqli_stmt_execute($stmt);
+
+  $resultData = mysqli_stmt_get_result($stmt);
+  if ($row = mysqli_fetch_assoc($resultData)) {
+    return $row;
+  } else {
+    $result = false;
+    return $result;
+  }
+
+  mysqli_stmt_close($stmt);
 }

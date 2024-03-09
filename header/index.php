@@ -1,5 +1,18 @@
 <?php
 session_start();
+
+require_once '../includes/dbh.inc.php';
+require_once '../includes/functions.inc.php';
+$postsCount = postCounter($conn);
+
+if (isset($_SESSION["userId"])) {
+
+  $userExists = userExists($conn, $_SESSION['userEmail']);
+
+  $name = $userExists['firstname'];
+  $surname = $userExists['surname'];
+  $surnameFirstletter = substr($surname, 0, 1);
+}
 ?>
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -13,41 +26,35 @@ session_start();
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <p class="nav-link fw-medium">Ile posiadamy ogłoszeń: </p>
+          <p class="nav-link fw-medium">Ile posiadamy ogłoszeń: <?php echo $postsCount['COUNT(offer_id)'] ?></p>
         </li>
       </ul>
       <ul class="navbar-nav ms-auto">
         <?php
         if (isset($_SESSION["userId"])) {
-
-          require_once '../includes/dbh.inc.php';
-          require_once '../includes/functions.inc.php';
-          $userExists = userExists($conn, $_SESSION['userEmail']);
-
-          $name = $userExists['firstname'];
-          $surname = $userExists['surname'];
-          $surnameFirstletter = substr($surname, 0, 1);
-
           echo '<li class="nav-item dropdown bg-warning rounded-5">';
-            echo '<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">';
+          echo '<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">';
+          if ($userExists['avatar'] != "") {
+            echo '<img src="../Images/ProfilePictures/' . $userExists['avatar'] . '" alt="profile picture" class="rounded-5 me-2" style="width: 40px; heigth: 40px; margin: -8px;">';
+          } else {
             echo '<img src="../Images/logos/logo.ico" alt="profile picture" class="rounded-5 me-2" style="width: 40px; heigth: 40px; margin: -8px;">';
-            echo  $name . " " . $surnameFirstletter.".";
-            echo '</a>';
-            echo '<ul class="dropdown-menu w-100 p-3 rounded mt-2">';
-              echo '<li><a class="dropdown-item border border-warning rounded-5 my-2 text-center text-warning" href="../user-page/index.php">Mój profil</a></li>';
-              echo '<li><a class="dropdown-item rounded-5 my-2 text-center border border-warning text-warning" href="../register-form/index.php">Ustawienia</a></li>';
-              echo '<li><a class="dropdown-item rounded-5 my-2 text-center bg-warning" href="../includes/logout.inc.php">Wyloguj</a></li>';
-            echo '</ul>';
+          }
+          echo  $name . " " . $surnameFirstletter . ".";
+          echo '</a>';
+          echo '<ul class="dropdown-menu w-100 p-3 rounded mt-2">';
+          echo '<li><a class="dropdown-item border border-warning rounded-5 my-2 text-center text-warning" href="../user-page/index.php">Mój profil</a></li>';
+          echo '<li><a class="dropdown-item rounded-5 my-2 text-center bg-warning" href="../includes/logout.inc.php">Wyloguj</a></li>';
+          echo '</ul>';
           echo '</li>';
         } else {
           echo '<li class="nav-item dropdown bg-warning rounded-5">';
-            echo '<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">';
-            echo 'Moje konto';
-            echo '</a>';
-            echo '<ul class="dropdown-menu w-100 p-3 rounded mt-2">';
-              echo '<li><a class="dropdown-item bg-warning rounded-5 my-2 text-center" href="../login-form/index.php">Zaloguj się</a></li>';
-              echo '<li><a class="dropdown-item rounded-5 my-2 text-center border border-warning text-warning" href="../register-form/index.php">Zarejestruj się</a></li>';
-            echo '</ul>';
+          echo '<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">';
+          echo 'Moje konto';
+          echo '</a>';
+          echo '<ul class="dropdown-menu w-100 p-3 rounded mt-2">';
+          echo '<li><a class="dropdown-item bg-warning rounded-5 my-2 text-center" href="../login-form/index.php">Zaloguj się</a></li>';
+          echo '<li><a class="dropdown-item rounded-5 my-2 text-center border border-warning text-warning" href="../register-form/index.php">Zarejestruj się</a></li>';
+          echo '</ul>';
           echo '</li>';
         }
         ?>
