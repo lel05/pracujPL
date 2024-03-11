@@ -56,9 +56,9 @@ function userExists($conn, $email)
   mysqli_stmt_close($stmt);
 }
 
-function createUser($conn, $name, $surname, $email, $pass)
+function createUser($conn, $name, $surname, $email, $pass, $role)
 {
-  $sql = "INSERT INTO user (firstname, surname, email, password) VALUES (?, ?, ?, ?);";
+  $sql = "INSERT INTO user (firstname, surname, email, password, role) VALUES (?, ?, ?, ?, ?);";
   $stmt = mysqli_stmt_init($conn);
   if (!mysqli_stmt_prepare($stmt, $sql)) {
     header("location: ../register-form/index.php?error=stmtfailed");
@@ -67,7 +67,7 @@ function createUser($conn, $name, $surname, $email, $pass)
 
   $hashedPass = password_hash($pass, PASSWORD_DEFAULT);
 
-  mysqli_stmt_bind_param($stmt, "ssss", $name, $surname, $email, $hashedPass);
+  mysqli_stmt_bind_param($stmt, "sssss", $name, $surname, $email, $hashedPass, $role);
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
   header("location: ../register-form/index.php?error=none");
@@ -124,14 +124,12 @@ function updateUserInfo($conn, $experience, $education, $skills, $courses, $link
       }
       $fileDestination = '../Images/ProfilePictures/' . $ppNameNew;
       move_uploaded_file($profilePictureTmpName, $fileDestination);
-      echo "<script>alert('gowno');</script>";
     } else {
       header("Location: ../user-page/index.php?error=profilepicturesizeerror");
       exit;
     }
   } else {
-    header("Location: ../user-page/index.php?error=profilepictureerror");
-    exit;
+    $ppNameNew = $userExists['avatar'];
   }
 
   $sql = "UPDATE `user` SET `birth_date`=?, `email`=?, `phone_number`=?, `avatar`=?, `job_experience`=?, `education`=?, `skills`=?, `courses`=?, `links`=? WHERE `user_id`=?";
@@ -168,4 +166,41 @@ function postCounter($conn)
   }
 
   mysqli_stmt_close($stmt);
+}
+
+function adminUpdateUserInfo($conn, $updatedUserId, $firstname, $surname, $updatedUserEmailNew, $experience, $education, $skills, $courses, $links, $email, $numertelefonu, $dataurodzenia, $profilePicture, $profilePictureTmpName, $profilePictureSize, $profilePictureError)
+{
+
+  $fileExt = explode('.', $profilePicture);
+  $fileActualExt = strtolower(end($fileExt));
+  $userExists = userExists($conn, $updatedUserEmailNew);
+
+  if ($profilePictureError === 0) {
+    if ($profilePictureSize < 1000000) {
+      $ppNameNew = uniqid('', true) . "." . $fileActualExt;
+      if ($userExists['avatar'] != "") {
+        unlink("../Images/ProfilePictures/" . $userExists['avatar']);
+      }
+      $fileDestination = '../Images/ProfilePictures/' . $ppNameNew;
+      move_uploaded_file($profilePictureTmpName, $fileDestination);
+    } else {
+      header("Location: ../admin/index.php?error=profilepicturesizeerror");
+      exit;
+    }
+  } else {
+    $ppNameNew = $userExists['avatar'];
+  }
+
+  $sql = "UPDATE `user` SET `firstname`=?,`surname`=?,`birth_date`=?, `email`=?, `phone_number`=?, `avatar`=?, `job_experience`=?, `education`=?, `skills`=?, `courses`=?, `links`=? WHERE `user_id`=?";
+  $stmt = mysqli_stmt_init($conn);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../admin/index.php?error=stmtfailed");
+    exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "sssssssssssi", $firstname, $surname, $dataurodzenia, $email, $numertelefonu, $ppNameNew, $experience, $education, $skills, $courses, $links, $updatedUserId);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+  header("location: ../admin/index.php?error=none");
+  exit();
 }

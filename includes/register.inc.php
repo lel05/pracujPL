@@ -27,7 +27,7 @@ if(isset($_POST["submit"])) {
     exit();
   }
 
-  createUser($conn, $name, $surname, $email, $pass);
+  createUser($conn, $name, $surname, $email, $pass, 'user');
 
 } else {
   header("location: ../register-form/index.php");

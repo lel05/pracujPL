@@ -68,18 +68,22 @@
     <div class="container">
       <div class="profile-card p-4">
         <?php
-        if (isset($_SESSION["userId"])) {
+        if (isset($_GET["userId"])) {
           require_once '../includes/dbh.inc.php';
           require_once '../includes/functions.inc.php';
-          $userExists = userExists($conn, $_SESSION['userEmail']);
+          $userExists = userExists($conn, $_GET['email']);
         } else {
           header("Location: ../main/index.php");
+          exit();
         }
+
         $name = $userExists['firstname'];
         $surname = $userExists['surname'];
         $user_name = $name . " " . $surname;
 
         $user_contact = array(
+          'Imie' => $userExists['firstname'],
+          'Nazwisko' => $userExists['surname'],
           'Email' => $userExists['email'],
           'Numer telefonu' => $userExists['phone_number'],
         );
@@ -98,11 +102,9 @@
             $linksArray = explode(" ", $userExists["links"]);
           }
         }
-
-
         ?>
 
-        <form action="../includes/user-page.inc.php" method="post" enctype="multipart/form-data">
+        <form action="../includes/editUser.inc.php" method="post" enctype="multipart/form-data">
 
           <div class="mb-3 shadow position-relative">
             <div style="height: 100px;">
@@ -117,7 +119,7 @@
                 ?>
                 <p><?php echo $user_name; ?></p>
               </div>
-              <div id="file-upload-container" class="d-none">
+              <div id="file-upload-container">
                 <input type="file" name="file" accept=".png, .jpg, .jpeg" id="file-input" class="float-start">
                 <p><?php echo $user_name; ?></p>
               </div>
@@ -125,99 +127,47 @@
           </div>
 
           <div class="mb-3 shadow position-relative contact-info-section">
-            <h2 class="p-1">Dane kontaktowe:</h2>
+            <h2 class="p-1">Dane:</h2>
             <ul class="p-1">
               <?php foreach ($user_contact as $key => $value) : ?>
                 <li>
                   <label for="<?php echo str_replace(' ', '-', $key); ?>"><?php echo "$key:" ?></label>
-                  <p class="contact-info" id="<?php echo str_replace(' ', '-', $key); ?>"><?php echo "$value"; ?></p>
-                  <input type="text" name="<?php echo str_replace(' ', '', strtolower(trim($key))) ?>" class="form-control contact-input d-none p-1" value="<?php echo $value; ?>">
+                  <input type="text"  id="<?php echo str_replace(' ', '-', $key); ?>" name="<?php echo str_replace(' ', '', strtolower(trim($key))) ?>" class="form-control contact-input p-1" value="<?php echo $value; ?>">
                 </li>
               <?php endforeach; ?>
               <li>
                 <label for="birthdate">Data urodzenia:</label>
-                <p class="contact-info" id="birthdate"><?php echo $birthDate ?></p>
-                <input type="text" name="dataurodzenia" class="form-control contact-input d-none p-1" value="<?php echo $birthDate; ?>" placeholder="rrrr-mm-dd">
+                <input type="text" id="birthdate" name="dataurodzenia" class="form-control contact-input p-1" value="<?php echo $birthDate; ?>" placeholder="rrrr-mm-dd">
               </li>
             </ul>
           </div>
           <div class="mb-3 shadow position-relative">
             <h2 class="p-1">Doświadczenie zawodowe:</h2>
-            <div class="p-1 experience-info overflow-v-scroll"><?php echo $user_experience; ?></div>
-            <textarea rows="4" cols="50" name="experience" class="form-control experience-input d-none p-1" id=""><?php echo $user_experience; ?></textarea>
+            <textarea rows="4" cols="50" name="experience" class="form-control experience-input p-1" id=""><?php echo $user_experience; ?></textarea>
           </div>
           <div class="mb-3 shadow position-relative">
             <h2 class="p-1">Wykształcenie:</h2>
-            <div class="p-1 education-info overflow-v-scroll"><?php echo $user_education; ?></div>
-            <textarea rows="4" cols="50" name="education" class="form-control education-input d-none p-1"><?php echo $user_education; ?></textarea>
+            <textarea rows="4" cols="50" name="education" class="form-control education-input p-1"><?php echo $user_education; ?></textarea>
           </div>
           <div class="mb-3 shadow position-relative">
             <h2 class="p-1">Umiejętności:</h2>
-            <div class="p-1 skills-info overflow-v-scroll"><?php echo $user_skills; ?></div>
-            <textarea rows="4" cols="50" name="skills" class="form-control skills-input d-none p-1"><?php echo $user_skills; ?></textarea>
+            <textarea rows="4" cols="50" name="skills" class="form-control skills-input p-1"><?php echo $user_skills; ?></textarea>
           </div>
           <div class="mb-3 shadow position-relative">
             <h2 class="p-1">Kursy:</h2>
-            <div class="shadow p-1 courses-info overflow-v-scroll"><?php echo $user_courses; ?></div>
-            <textarea rows="4" cols="50" name="courses" class="form-control courses-input d-none p-1"><?php echo $user_courses; ?></textarea>
+            <textarea rows="4" cols="50" name="courses" class="form-control courses-input p-1"><?php echo $user_courses; ?></textarea>
           </div>
           <div class="mb-3 position-relative">
             <h2 class="p-1">Linki:</h2>
-            <div class="shadow p-1 links-info overflow-v-scroll">
-              <?php
-              if($linksArray != "") {
-                foreach ($linksArray as $link) {
-                  $hostName = parse_url($link);
-                  echo "<a href='$link'>" . $hostName['host'] . "</a><br>";
-                }
-              }
-              ?>
-            </div>
-            <textarea rows="4" cols="50" name="links" class="form-control links-input d-none p-1"><?php echo $links; ?></textarea>
+            <textarea rows="4" cols="50" name="links" class="form-control links-input p-1"><?php echo $links; ?></textarea>
           </div>
-          <button type="submit" name="submit" class="btn btn-primary float-end btn-sm bottom-0 end-0 mt-1 me-1 save-button d-none">Zapisz</button>
+          <input type="text" name="updatedUserEmail" value="<?php echo $userExists['email'] ?>" class="d-none">
+          <input type="text" name="userId" value="<?php echo $userExists['user_id'] ?>" class="d-none">
+          <button type="submit" name="submit" class="btn btn-primary float-end btn-sm bottom-0 end-0 mt-1 me-1 save-button">Zapisz</button>
         </form>
-        <button class="btn btn-primary btn-sm bottom-0 end-0 mt-1 me-1 edit-button">Edytuj</button>
       </div>
     </div>
   </section>
-
-  <script>
-    const editButton = document.querySelector('.edit-button');
-    const saveButton = document.querySelector('.save-button');
-
-    editButton.addEventListener('click', () => {
-      const allInfos = document.querySelectorAll('.contact-info, .experience-info, .education-info, .skills-info, .courses-info, .links-info');
-      const allTextareas = document.querySelectorAll('.contact-input, .experience-input, .education-input, .skills-input, .courses-input, .links-input');
-      const imageContainer = document.getElementById('image-container');
-      const fileUploadContainer = document.getElementById('file-upload-container');
-      const isEditing = editButton.textContent === 'Edytuj';
-
-      if (isEditing) {
-        allInfos.forEach(info => {
-          info.classList.add('d-none');
-        });
-        allTextareas.forEach(input => {
-          input.classList.remove('d-none');
-        });
-        imageContainer.classList.add('d-none');
-        fileUploadContainer.classList.remove('d-none');
-        editButton.textContent = 'Anuluj';
-        saveButton.classList.remove('d-none');
-      } else {
-        allInfos.forEach(info => {
-          info.classList.remove('d-none');
-        });
-        allTextareas.forEach(input => {
-          input.classList.add('d-none');
-        });
-        imageContainer.classList.remove('d-none');
-        fileUploadContainer.classList.add('d-none');
-        editButton.textContent = 'Edytuj';
-        saveButton.classList.add('d-none');
-      }
-    });
-  </script>
 </body>
 
 </html>

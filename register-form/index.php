@@ -74,7 +74,5 @@
       });
       myToast.show();
     </script>
-
 </body>
-
 </html>

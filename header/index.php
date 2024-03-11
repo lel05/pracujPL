@@ -17,7 +17,7 @@ if (isset($_SESSION["userId"])) {
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid  mx-custom">
-    <a href="index.php" style="width: 20%; height: 56px;" class="rounded-5 navbar-brand overflow-hidden d-flex align-items-center justify-content-center">
+    <a href="../main/index.php" style="width: 20%; height: 56px;" class="rounded-5 navbar-brand overflow-hidden d-flex align-items-center justify-content-center">
       <img src="../Images/logos/logoWithName.png" alt="logo" class="img-fluid">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,6 +42,9 @@ if (isset($_SESSION["userId"])) {
           echo  $name . " " . $surnameFirstletter . ".";
           echo '</a>';
           echo '<ul class="dropdown-menu w-100 p-3 rounded mt-2">';
+          if ($userExists['role'] == "admin") {
+            echo '<li><a class="dropdown-item border border-warning rounded-5 my-2 text-center text-warning" href="../admin/index.php">Admin Page</a></li>';
+          }
           echo '<li><a class="dropdown-item border border-warning rounded-5 my-2 text-center text-warning" href="../user-page/index.php">Mój profil</a></li>';
           echo '<li><a class="dropdown-item rounded-5 my-2 text-center bg-warning" href="../includes/logout.inc.php">Wyloguj</a></li>';
           echo '</ul>';
