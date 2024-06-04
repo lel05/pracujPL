@@ -19,7 +19,12 @@
     ?>
   </header>
 
-  <?php
+  <section style="background-color: red; height: 200px;">
+    <!-- wyszukiwarka -->
+  </section>
+
+  <section class="position-absolute top-50 start-50 translate-middle">
+    <?php
 
     
 
