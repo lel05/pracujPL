@@ -204,3 +204,138 @@ function adminUpdateUserInfo($conn, $updatedUserId, $firstname, $surname, $updat
   header("location: ../admin/index.php?error=none");
   exit();
 }
+
+function deleteUser($conn, $id)
+{
+  $sql = "DELETE FROM `user` WHERE user_id=?;";
+  $stmt = mysqli_stmt_init($conn);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../admin/index.php?error=stmtfailed");
+    exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "s", $id);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+  header("location: ../admin/index.php?error=none");
+  exit();
+}
+
+function deleteOffer($conn, $id)
+{
+  $sql = "DELETE FROM `offer` WHERE offer_id=?;";
+  $stmt = mysqli_stmt_init($conn);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../admin/index.php?error=stmtfailed");
+    exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "s", $id);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+  header("location: ../admin/index.php?error=none");
+  exit();
+}
+
+function AddOffer($conn, $company_id, $profession_name, $type_of_contract, $type_of_job, $salary, $days, $hours, $expired, $category_id, $duties, $requirements)
+{
+  $sql = "INSERT INTO offer (company_id, profession_name, type_of_contract, type_of_job, salary, days, hours, expired, category_id, duties, requirements) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+  $stmt = mysqli_stmt_init($conn);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../admin/addOffer.php?error=stmtfailed");
+    exit();
+  }
+
+  $expired = date('Y-m-d', strtotime($expired));
+
+  mysqli_stmt_bind_param($stmt, "isssssssiss", $company_id, $profession_name, $type_of_contract, $type_of_job, $salary, $days, $hours, $expired, $category_id, $duties, $requirements);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+  header("location: ../admin/index.php?error=none");
+  exit();
+}
+
+function getCompanies($conn)
+{
+  $sql = "SELECT company_id, name FROM company;";
+  $stmt = mysqli_stmt_init($conn);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../admin/addOffer.php?error=stmtfailed");
+    exit();
+  }
+
+  mysqli_stmt_execute($stmt);
+    $resultData = mysqli_stmt_get_result($stmt);
+
+    $companies = array();
+    while ($row = mysqli_fetch_assoc($resultData)) {
+        $companies[] = $row;
+    }
+
+    mysqli_stmt_close($stmt);
+
+    return $companies;
+}
+
+function getCategories($conn)
+{
+  $sql = "SELECT category_id, name FROM category;";
+  $stmt = mysqli_stmt_init($conn);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../admin/addOffer.php?error=stmtfailed");
+    exit();
+  }
+
+  mysqli_stmt_execute($stmt);
+    $resultData = mysqli_stmt_get_result($stmt);
+
+    $cateogies = array();
+    while ($row = mysqli_fetch_assoc($resultData)) {
+        $cateogies[] = $row;
+    }
+
+    mysqli_stmt_close($stmt);
+
+    return $cateogies;
+}
+
+function EditOffer($conn, $offer_id, $company_id, $profession_name, $type_of_contract, $type_of_job, $salary, $days, $hours, $expired, $category_id, $duties, $requirements)
+{
+  $sql = "UPDATE `offer` SET `company_id`=?,`profession_name`=?,`type_of_contract`=?,`type_of_job`=?,`salary`=?,`days`=?,`hours`=?,`expired`=?,`category_id`=?,`duties`=?,`requirements`=? WHERE offer_id=?";
+  $stmt = mysqli_stmt_init($conn);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../admin/addOffer.php?error=stmtfailed");
+    exit();
+  }
+
+  $expired = date('Y-m-d', strtotime($expired));
+
+  mysqli_stmt_bind_param($stmt, "isssssssissi", $company_id, $profession_name, $type_of_contract, $type_of_job, $salary, $days, $hours, $expired, $category_id, $duties, $requirements, $offer_id);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+  header("location: ../admin/index.php?error=none");
+  exit();
+}
+
+function getOffer($conn, $offerId)
+{
+  $sql = "SELECT * FROM offer WHERE offer_id = ?;";
+  $stmt = mysqli_stmt_init($conn);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../admin/index.php?error=stmtfailed");
+    exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "i", $offerId);
+  mysqli_stmt_execute($stmt);
+
+  $resultData = mysqli_stmt_get_result($stmt);
+  if ($row = mysqli_fetch_assoc($resultData)) {
+    return $row;
+  } else {
+    $result = false;
+    return $result;
+  }
+
+  mysqli_stmt_close($stmt);
+}

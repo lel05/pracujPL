@@ -140,7 +140,7 @@
                       echo '<td>' . $row['phone_number'] . '</td>';
                       echo '<td>' . $row['role'] . '</td>';
                       echo '<td><a href="../admin/editUser.php?userId=' . $row['user_id'] . '&email=' . $row['email'] . '" class="text-warning">edit</a></td>';
-                      echo '<td><a href="../admin/deleteUser.php?userId=' . $row['user_id'] . '" class="text-danger">delete</a></td>';
+                      echo '<td><a href="../includes/deleteUser.inc.php?userId=' . $row['user_id'] . '" class="text-danger">delete</a></td>';
                       echo '</tr>';
                     }
                   }
@@ -152,40 +152,59 @@
         </div>
         <div class="mb-3 shadow position-relative">
           <h2 class="p-1">Oferty:</h2>
-          <div class="admin-containers overflow-x-hidden overflow-y-auto">
+          <div class="admin-containers overflow-y-auto">
             <table class="p-1">
-              <tr>
-                <td>Id</td>
-                <td>Firstname</td>
-                <td>Surname</td>
-                <td>Birth date</td>
-                <td>Email</td>
-                <td>Phone Number</td>
-                <td>Role</td>
-                <td class="text-warning">Edit</td>
-                <td class="text-danger">Delete</td>
-              </tr>
-              <?php
-              $sql = "SELECT * FROM user";
-              $result = $conn->query($sql);
-              if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                  echo '<tr>';
-                  echo '<td>' . $row['user_id'] . '</td>';
-                  echo '<td>' . $row['firstname'] . '</td>';
-                  echo '<td>' . $row['surname'] . '</td>';
-                  echo '<td>' . $row['birth_date'] . '</td>';
-                  echo '<td>' . $row['email'] . '</td>';
-                  echo '<td>' . $row['phone_number'] . '</td>';
-                  echo '<td>' . $row['role'] . '</td>';
-                  echo '<td><a href="../admin/editUser.php?userId=' . $row['user_id'] . '" class="text-warning">edit</a></td>';
-                  echo '<td><a href="../admin/deleteUser.php?userId=' . $row['user_id'] . '" class="text-danger">delete</a></td>';
-                  echo '</tr>';
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th class="text-truncate">Company id</th>
+                  <th class="text-truncate">Profession name</th>
+                  <th class="text-truncate">Type of contract</th>
+                  <th class="text-truncate">Type of job</th>
+                  <th class="text-truncate">Salary</th>
+                  <th class="text-truncate">Days</th>
+                  <th class="text-truncate">Hours</th>
+                  <th class="text-truncate">Expired</th>
+                  <th class="text-truncate">Category id</th>
+                  <th class="text-truncate">Duties</th>
+                  <th class="text-truncate">Requirements</th>
+                  <th class="text-truncate">Application count</th>
+                  <th class="text-warning">Edit</th>
+                  <th class="text-danger">Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                $sql = "SELECT * FROM offer";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                  while ($row = $result->fetch_assoc()) {
+                    echo '<tr>';
+                    echo '<td class="text-truncate">' . $row['offer_id'] . '</td>';
+                    echo '<td class="text-truncate">' . $row['company_id'] . '</td>';
+                    echo '<td class="text-truncate">' . $row['profession_name'] . '</td>';
+                    echo '<td class="text-truncate">' . $row['type_of_contract'] . '</td>';
+                    echo '<td class="text-truncate">' . $row['type_of_job'] . '</td>';
+                    echo '<td class="text-truncate">' . $row['salary'] . '</td>';
+                    echo '<td class="text-truncate">' . $row['days'] . '</td>';
+                    echo '<td class="text-truncate">' . $row['hours'] . '</td>';
+                    echo '<td class="text-truncate">' . $row['expired'] . '</td>';
+                    echo '<td class="text-truncate">' . $row['category_id'] . '</td>';
+                    echo '<td>' . $row['duties'] . '</td>';
+                    echo '<td>' . $row['requirements'] . '</td>';
+                    echo '<td>' . $row['application_count'] . '</td>';
+                    echo '<td><a href="../admin/editOffer.php?offerId=' . $row['offer_id'] . '" class="text-warning">edit</a></td>';
+                    echo '<td><a href="../includes/deleteOffer.inc.php?offerId=' . $row['offer_id'] . '" class="text-danger">delete</a></td>';
+                    echo '</tr>';
+                  }
                 }
-              }
-              ?>
+                ?>
+              </tbody>
             </table>
           </div>
+          <form action="addOffer.php" method="post">
+            <button type="submit" class="btn btn-warning m-2" id="addOfferBtn">Dodaj oferte</button>
+          </form>
         </div>
       </div>
     </div>
