@@ -16,8 +16,10 @@
     <img src="../Images/logos/logoWithName.png" alt="logo" class="img-fluid">
   </a>
 
+  <img src="../Images/logos/character.png" alt="character">
+
   <div class="container position-absolute top-50 start-50 translate-middle d-flex justify-content-center align-items-center w-25">
-    <div class="login-user w-100 bg-secondary bg-opacity-10 p-4 rounded-4 border border-warning">
+    <div class="login-user w-100 bg-secondary bg-opacity-25 p-4 rounded-4 border border-warning">
       <p class="text-center text-uppercase fs-5 fw-medium">Logowanie dla użytkowników</p>
       <form action="../includes/login.inc.php" method="post">
         <div class="mb-3">

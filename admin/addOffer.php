@@ -105,7 +105,7 @@
                 <input type="text" id="profession_name" name="profession_name" class="form-control contact-input p-1" value="" placeholder="np. Programista">
               </li>
               <li class="mt-2">
-                <select id="contractType" name="contractType">
+                <select id="contractType" name="type_of_contract">
                   <option value="Umowa na czas określony">Umowa o pracę na czas określony</option>
                   <option value="Umowa na czas nieokreślony">Umowa o pracę na czas nieokreślony</option>
                   <option value="Umowa o dzieło">Umowa o dzieło</option>
