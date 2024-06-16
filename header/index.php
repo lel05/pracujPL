@@ -35,7 +35,7 @@ if (isset($_SESSION["userId"])) {
           echo '<li class="nav-item dropdown bg-warning rounded-5">';
           echo '<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">';
           if ($userExists['avatar'] != "") {
-            echo '<img src="../Images/ProfilePictures/' . $userExists['avatar'] . '" alt="profile picture" class="rounded-5 me-2" style="width: 40px; heigth: 40px; margin: -8px;">';
+            echo '<img src="../Images/ProfilePictures/' . $userExists['avatar'] . '" alt="profile picture" class="rounded-5 me-2" style="width: 50px; heigth: 50px; margin: -8px;">';
           } else {
             echo '<img src="../Images/logos/logo.ico" alt="profile picture" class="rounded-5 me-2" style="width: 40px; heigth: 40px; margin: -8px;">';
           }
