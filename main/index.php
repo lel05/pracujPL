@@ -12,7 +12,6 @@
 
   $categories = getCategories($conn);
   $contracts = array(
-    "Wybierz typ kontraktu",
     "Umowa o pracę na czas określony",
     "Umowa o pracę na czas nieokreślony",
     "Umowa o dzieło",
@@ -26,9 +25,10 @@
   );
 
   if (isset($_POST['SearchBtnClicked'])) {
+
     $category_id = $_POST['category_id'];
     $type_of_contract = $_POST['type_of_contract'];
-    $profession_name = $_POST['prosfession_name'];
+    $profession_name = $_POST['profession_name'];
 
     $resultWithSearch = getSearchData($conn, $category_id, $profession_name, $type_of_contract);
   }
@@ -80,7 +80,7 @@
     <form id="jobSearchForm" class="row gy-2 gx-3 align-items-center justify-content-center" action="../main/index.php" method="post">
       <div class="col-auto">
         <label for="jobTitle" class="visually-hidden">Stanowisko</label>
-        <input type="text" class="form-control" id="jobTitle" placeholder="Wprowadź stanowisko" name="prosfession_name">
+        <input type="text" class="form-control" id="jobTitle" placeholder="Wprowadź stanowisko" name="profession_name">
       </div>
       <div class="col-auto">
         <label for="category" class="visually-hidden">Kategoria</label>
@@ -98,6 +98,7 @@
       <div class="col-auto">
         <label for="contractType" class="visually-hidden">Rodzaj Kontraktu</label>
         <select class="form-control" id="contractType" name="type_of_contract">
+          <option value="">Wybierz typ kontraktu</option>
           <?php foreach ($contracts as $data) : ?>
             <?php if ($data == $type_of_contract) : ?>
               <option value="<?php echo $data; ?>" selected><?php echo $data; ?></option>
@@ -117,23 +118,26 @@
     <?php if (isset($_POST['SearchBtnClicked'])) : ?>
       <?php foreach ($resultWithSearch as $data) : ?>
         <a href="offerPage.php?offerId=<?php echo $data['offer_id'] ?>">
-          <div>
-            <p class="">
-              <?php $data['profession_name'] ?>
-              <?php $data['salary'] ?>
+          <div class="float-start m-4 shadow-sm p-3 mb-5 rounded">
+            <p>
+              <span class="fs-5 fw-bold text-secondary"><?php echo $data['profession_name'] ?></span><br>
+              <?php echo $data['salary'] ?>/mies
             </p>
-            <img src="../Images/CompanyLogo/<?php $data['logo'] ?>" alt="Logo firmy">
-            <p class="">
-              <?php echo $data['name'] ?><br>
-              <?php echo $data['localization'] ?>
+            <img src="../Images/CompanyLogo/<?php echo $data['logo'] ?>" alt="Logo firmy">
+            <p class="float-end ms-4">
+              <span class="fs-5"><?php echo $data['name'] ?></span><br>
+              <span class="text-secondary"><?php echo $data['localization'] ?></span>
             </p>
           </div>
         </a>
       <?php endforeach; ?>
+      <?php if(empty($resultWithSearch)): ?>
+        <p class="position-absolute top-50 start-50 translate-middle fs-1">Nie znaleziono szukanych ofert</p>
+      <?php endif; ?>
     <?php else : ?>
       <?php foreach ($resultNoSearch as $data) : ?>
         <a href="offerPage.php?offerId=<?php echo $data['offer_id'] ?>">
-          <div class="float-start m-4">
+          <div class="float-start m-4 shadow-sm p-3 mb-5 rounded">
             <p>
               <span class="fs-5 fw-bold text-secondary"><?php echo $data['profession_name'] ?></span><br>
               <?php echo $data['salary'] ?>/mies

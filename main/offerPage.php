@@ -10,10 +10,13 @@
   include_once '../includes/dbh.inc.php';
   include_once '../includes/functions.inc.php';
 
+  error_reporting(0);
+
   session_start();
 
   $offerId = $_GET['offerId'];
   $result = getOffer($conn, $offerId);
+  $user_id = 0;
 
   ?>
   <link rel="stylesheet" href="../styles/header/styles.css">
@@ -41,7 +44,7 @@
 
   <section>
     <div class="d-flex justify-content-center">
-      <img src="../Images/CompanyLogo/<?php echo $result['logo'] ?>" alt="Logo firmy" class="img-fluid w-25">
+      <img src="../Images/CompanyLogo/<?php echo $result['logo'] ?>" alt="Logo firmy" class="img-fluid m-1" style="width: 300px;">
     </div>
   </section>
 
@@ -61,7 +64,14 @@
       </p>
       <form action="../includes/aplication.inc.php" method="post" class="float-end">
         <input type="text" name="offer_id" value="<?php echo $offerId ?>" hidden>
-        <input type="submit" value="Aplikuj" name="submit" class="btn btn-warning">
+        <input type="text" name="user_id" value="<?php echo $userExists['user_id'] ?>" hidden>
+        <?php if(checkIfUserHasApplicatedToOffer($conn, $user_id, $offerId)): ?>
+          <input type="submit" value="zaaplikowano" name="submit" class="btn btn-warning" disabled>
+        <?php elseif(!isset($_SESSION["userId"])): ?>
+          <input type="submit" value="Zaloguj się aby aplikować" name="submit" class="btn btn-warning" disabled>
+        <?php else: ?>
+          <input type="submit" value="Aplikuj" name="submit" class="btn btn-warning">
+        <?php endif; ?>
       </form>
 
 

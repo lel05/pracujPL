@@ -64,6 +64,7 @@
     include_once '../header/index.php';
     ?>
   </header>
+
   <section>
     <div class="container">
       <div class="profile-card p-4">
@@ -165,7 +166,7 @@
             <h2 class="p-1">Linki:</h2>
             <div class="shadow p-1 links-info overflow-v-scroll">
               <?php
-              if($linksArray != "") {
+              if ($linksArray != "") {
                 foreach ($linksArray as $link) {
                   $hostName = parse_url($link);
                   echo "<a href='$link'>" . $hostName['host'] . "</a><br>";

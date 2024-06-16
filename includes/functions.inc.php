@@ -342,75 +342,22 @@ function getOffer($conn, $offerId)
 
 function getSearchData($conn, $category_id, $profession_name, $type_of_contract)
 {
-  if ($category_id != null && $profession_name == null && $type_of_contract == null) {
-    $sql = "SELECT * FROM offer JOIN company ON offer.company_id=company.company_id WHERE category_id=?;";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-      header("location: ../main/index.php?error=stmtfailed");
-      exit();
-    }
+  $sql = "SELECT * FROM offer JOIN company ON offer.company_id=company.company_id WHERE 1=1";
 
-    mysqli_stmt_bind_param($stmt, "i", $category_id);
+  if($category_id != '') {
+    $sql .= " AND category_id='$category_id'";
   }
-  if ($category_id == null && $profession_name != null && $type_of_contract == null) {
-    $sql = "SELECT * FROM offer JOIN company ON offer.company_id=company.company_id WHERE profession_name LIKE '%?%';";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-      header("location: ../main/index.php?error=stmtfailed");
-      exit();
-    }
-
-    mysqli_stmt_bind_param($stmt, "s", $profession_name);
+  if($profession_name != '') {
+    $sql .= " AND profession_name='$profession_name'";
   }
-  if ($category_id == null && $profession_name == null && $type_of_contract != null) {
-    $sql = "SELECT * FROM offer JOIN company ON offer.company_id=company.company_id WHERE type_of_contract=?;";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-      header("location: ../main/index.php?error=stmtfailed");
-      exit();
-    }
-
-    mysqli_stmt_bind_param($stmt, "s", $type_of_contract);
+  if($type_of_contract != '') {
+    $sql .= " AND type_of_contract='$type_of_contract'";
   }
-  if ($category_id != null && $profession_name != null && $type_of_contract == null) {
-    $sql = "SELECT * FROM offer JOIN company ON offer.company_id=company.company_id WHERE profession_name LIKE '%?%' AND category_id=?;";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-      header("location: ../main/index.php?error=stmtfailed");
-      exit();
-    }
 
-    mysqli_stmt_bind_param($stmt, "si", $profession_name, $category_id);
-  }
-  if ($category_id == null && $profession_name != null && $type_of_contract != null) {
-    $sql = "SELECT * FROM offer JOIN company ON offer.company_id=company.company_id WHERE profession_name LIKE '%?%' AND type_of_contract=?;";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-      header("location: ../main/index.php?error=stmtfailed");
-      exit();
-    }
-
-    mysqli_stmt_bind_param($stmt, "ss", $profession_name, $type_of_contract);
-  }
-  if ($category_id != null && $profession_name == null && $type_of_contract != null) {
-    $sql = "SELECT * FROM offer JOIN company ON offer.company_id=company.company_id WHERE category_id=? AND type_of_contract=?;";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-      header("location: ../main/index.php?error=stmtfailed");
-      exit();
-    }
-
-    mysqli_stmt_bind_param($stmt, "is", $category_id, $type_of_contract);
-  }
-  if ($category_id != null && $profession_name != null && $type_of_contract != null) {
-    $sql = "SELECT * FROM offer JOIN company ON offer.company_id=company.company_id WHERE category_id=? AND type_of_contract=? AND profession_name LIKE '%?%';";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-      header("location: ../main/index.php?error=stmtfailed");
-      exit();
-    }
-
-    mysqli_stmt_bind_param($stmt, "iss", $category_id, $type_of_contract, $profession_name);
+  $stmt = mysqli_stmt_init($conn);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../main/index.php?error=stmtfailed");
+    exit();
   }
 
   mysqli_stmt_execute($stmt);
@@ -425,6 +372,7 @@ function getSearchData($conn, $category_id, $profession_name, $type_of_contract)
 
   return $offers;
 }
+
 
 function getOffersData($conn)
 {
@@ -460,6 +408,41 @@ function addAplicationToOffer($conn, $offer_id)
   mysqli_stmt_bind_param($stmt, "i", $offer_id);
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
+}
+
+function addApplicationToDatabase($conn, $user_id, $offer_id)
+{
+  $sql = "INSERT INTO applications(user_id, offer_id) VALUES (?,?);";
+  $stmt = mysqli_stmt_init($conn);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../main/index.php?error=stmtfailed");
+    exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "ii", $user_id, $offer_id);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
   header("location: ../main/index.php?applicationDone=");
   exit();
+}
+
+function checkIfUserHasApplicatedToOffer($conn, $user_id, $offer_id)
+{
+  $sql = "SELECT 1 FROM applications WHERE user_id = ? AND offer_id = ?;";
+    $stmt = mysqli_stmt_init($conn);
+    
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        echo "SQL statement failed";
+        exit();
+    }
+    
+    mysqli_stmt_bind_param($stmt, "ii", $user_id, $offer_id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_store_result($stmt);
+    
+    $resultCheck = mysqli_stmt_num_rows($stmt);
+    
+    mysqli_stmt_close($stmt);
+    
+    return $resultCheck > 0;
 }

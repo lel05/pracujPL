@@ -9,6 +9,7 @@ if (isset($_SESSION["userId"])) {
 
   $userExists = userExists($conn, $_SESSION['userEmail']);
 
+  $user_id = $userExists['user_id'];
   $name = $userExists['firstname'];
   $surname = $userExists['surname'];
   $surnameFirstletter = substr($surname, 0, 1);
