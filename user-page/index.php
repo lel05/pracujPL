@@ -169,7 +169,7 @@
               if ($linksArray != "") {
                 foreach ($linksArray as $link) {
                   $hostName = parse_url($link);
-                  echo "<a href='$link'>" . $hostName['host'] . "</a><br>";
+                  echo "<a href='$link' target='_blank'>" . $hostName['host'] . "</a><br>";
                 }
               }
               ?>
