@@ -16,6 +16,26 @@ if (isset($_SESSION["userId"])) {
 }
 ?>
 
+<style>
+  .privacy-policy {
+    box-shadow: inset 0 0 0 0 #FFC107;
+    color: #5B5F65;
+    margin: 0 -.25rem;
+    padding: 0 .25rem;
+    transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
+    height: 30px;
+    text-align: center;
+    border-radius: 10px;
+  }
+  .privacy-policy:hover {
+    box-shadow: inset 202px 0 0 0 #FFC107;
+    color: black;
+    border-radius: 10px;
+  }
+
+</style>
+
+
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid  mx-custom">
     <a href="../main/index.php" style="width: 20%; height: 56px;" class="rounded-5 navbar-brand overflow-hidden d-flex align-items-center justify-content-center">
@@ -31,6 +51,7 @@ if (isset($_SESSION["userId"])) {
         </li>
       </ul>
       <ul class="navbar-nav ms-auto">
+        <a href="../privacy-policy/privacy-policy.php" class="mt-1 me-4 privacy-policy">Polityka Prywatności</a>
         <?php
         if (isset($_SESSION["userId"])) {
           echo '<li class="nav-item dropdown bg-warning rounded-5">';
